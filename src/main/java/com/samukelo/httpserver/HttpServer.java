@@ -30,10 +30,15 @@ public class HttpServer {
             //Reading
 
             //Writing
-            String html = "<html><head><title>Java HTTP server</title></head><body><h1>Can you believe it?My own http server!</h1></body></html>";
+            String html = "<html><head><title>Java HTTP server</title></head><body><h1>Can you believe it?<br>Sam's own http server!</h1></body></html>";
 
+            final String CRLF = "\r\n"; //13, 10 ASCII
             String response =
-                    "HTTP/1.1 200 OK";//Status line(response) : HTTP VERSION RESPONSE CODE RESPONSE MESSAGE
+                    "HTTP/1.1 200 OK" + CRLF +
+                    "Content Length: " + html.getBytes().length + CRLF +
+                    CRLF + html + CRLF + CRLF;//Status line(response) : HTTP VERSION RESPONSE CODE RESPONSE MESSAGE
+
+            outputStream.write(response.getBytes()); //Writing to output stream in bytes
 
 
 
