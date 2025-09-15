@@ -33,11 +33,18 @@ public class ServerListenerThread extends Thread{
 
                 LOGGER.info("  Connection Accepted: " + socket.getInetAddress());
 
+                HttpConnectionWorkerThread workerThread = new HttpConnectionWorkerThread(socket);
+                workerThread.start();
             }
 
-            //serverSocket.close(); // Handle closing socket later: TODO
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("Problem with setting socket", e);
+        }finally {
+            if (serverSocket != null){
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {}
+            }
         }
     }
 }
