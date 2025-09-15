@@ -7,10 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 
 //Driver class for http server
@@ -22,13 +18,13 @@ public class HttpServer {
     public static void main(String[] args) {
 
 
-        System.out.println("Server starting...");
+
         LOGGER.info("Server starting...");
         ConfigurationManager.getInstance().loadConfigurationFile("src/main/resources/http.json");
         Configuration conf = ConfigurationManager.getInstance().getCurrentConfiguration();
 
-        System.out.println("Port: "+ conf.getPort());
-        System.out.println("Webroot: " + conf.getWebroot());
+        LOGGER.info("Port: "+ conf.getPort());
+        LOGGER.info("Webroot: " + conf.getWebroot());
 
         ServerListenerThread serverListenerThread = null;
         try {
