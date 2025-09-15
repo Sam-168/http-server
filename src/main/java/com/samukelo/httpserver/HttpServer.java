@@ -2,6 +2,9 @@ package com.samukelo.httpserver;
 
 import com.samukelo.httpserver.config.Configuration;
 import com.samukelo.httpserver.config.ConfigurationManager;
+import com.samukelo.httpserver.core.ServerListenerThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,46 +12,34 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
 //Driver class for http server
 public class HttpServer {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(HttpServer.class);
+
+
     public static void main(String[] args) {
+
+
         System.out.println("Server starting...");
+        LOGGER.info("Server starting...");
         ConfigurationManager.getInstance().loadConfigurationFile("src/main/resources/http.json");
         Configuration conf = ConfigurationManager.getInstance().getCurrentConfiguration();
 
         System.out.println("Port: "+ conf.getPort());
         System.out.println("Webroot: " + conf.getWebroot());
 
-        //A server socket that is going to listen to a specific port
+        ServerListenerThread serverListenerThread = null;
         try {
-            ServerSocket serverSocket = new ServerSocket(conf.getPort());
-           Socket socket = serverSocket.accept(); //prompts a socket to accept a connection(listening to a port)
-
-            InputStream inputStream = socket.getInputStream();//Reading something from the socket(get Input Stream)
-            OutputStream outputStream = socket.getOutputStream(); //write to socket
-
-            //Reading
-
-            //Writing
-            String html = "<html><head><title>Java HTTP server</title></head><body><h1>Can you believe it?<br>Sam's own http server!</h1></body></html>";
-
-            final String CRLF = "\r\n"; //13, 10 ASCII
-            String response =
-                    "HTTP/1.1 200 OK" + CRLF +
-                    "Content Length: " + html.getBytes().length + CRLF +
-                    CRLF + html + CRLF + CRLF;//Status line(response) : HTTP VERSION RESPONSE CODE RESPONSE MESSAGE
-
-            outputStream.write(response.getBytes()); //Writing to output stream in bytes
-
-
-
-            //Closing resources
-            inputStream.close();
-            outputStream.close();
-            socket.close();
-            serverSocket.close();
+            serverListenerThread = new ServerListenerThread(conf.getPort(), conf.getWebroot());
+            serverListenerThread.start();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            //throw new RuntimeException(e);
         }
+
+
+
     }
 }
