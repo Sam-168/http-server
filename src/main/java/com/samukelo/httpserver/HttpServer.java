@@ -16,9 +16,6 @@ public class HttpServer {
 
 
     public static void main(String[] args) {
-
-
-
         LOGGER.info("Server starting...");
         ConfigurationManager.getInstance().loadConfigurationFile("src/main/resources/http.json");
         Configuration conf = ConfigurationManager.getInstance().getCurrentConfiguration();
