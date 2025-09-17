@@ -13,13 +13,26 @@ public class HttpParser {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(HttpParser.class);
 
-    public void parseHttpRequest(InputStream inputStream){
+    public HttpRequest parseHttpRequest(InputStream inputStream){
 
         InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.US_ASCII);
-        parseRequestLine(inputStream);
-        parseHeaders(inputStream);
-        parseBody(inputStream);
 
+        HttpRequest request = new HttpRequest();
+        parseRequestLine(reader, request);
+        parseHeaders(reader, request);
+        parseBody(reader, request);
+
+        return request;
 
     }
+    private void parseRequestLine(InputStreamReader reader, HttpRequest request) {
+    }
+
+    private void parseBody(InputStreamReader reader, HttpRequest request) {
+    }
+
+    private void parseHeaders(InputStreamReader reader, HttpRequest request) {
+    }
+
+
 }
