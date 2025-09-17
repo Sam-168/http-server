@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -20,6 +21,9 @@ class HttpParserTest {
     }
     @Test
     void parseHttpRequest() {
+        httpParser.parseHttpRequest(
+                generateValidTestCase()
+        );
     }
     //method to generate test case
     private InputStream generateValidTestCase(){
@@ -41,6 +45,9 @@ class HttpParserTest {
                 "\r\n";
 
         InputStream inputStream = new ByteArrayInputStream(rawData.getBytes(
-                StandardCharsets.US_ASCII))
+                StandardCharsets.US_ASCII
+            )
+        );
+        return inputStream;
     }
 }
