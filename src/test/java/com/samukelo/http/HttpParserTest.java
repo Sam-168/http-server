@@ -49,13 +49,26 @@ class HttpParserTest {
             HttpRequest request = httpParser.parseHttpRequest(
                     generateBadTestCaseMethodName2()
             );
-            //Bad test cases work without this hmm?fail();
+            fail();
         } catch (HttpParsingException e) {
             assertEquals(e.getErrorCode(), HttpStatusCode.SERVER_ERROR_501_NOT_IMPLEMENTED);
         }
 
     }
-    //method to generate test case
+    @Test
+    void parseHttpRequestInvalidNumItems() {
+        try {
+            HttpRequest request = httpParser.parseHttpRequest(
+                    generateBadTestCaseRequestLineInvalidNumOfItems()
+            );
+            fail();
+        } catch (HttpParsingException e) {
+            //e.printStackTrace();
+            assertEquals(HttpStatusCode.CLIENT_ERROR_400_BAD_REQUEST, e.getErrorCode());
+        }
+
+    }
+    //method to generate test cases
     private InputStream generateValidGETTestCase(){
         String rawData = "GET / HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
@@ -97,6 +110,20 @@ class HttpParserTest {
 
     private InputStream generateBadTestCaseMethodName2(){
         String rawData = "GETTTT / HTTP/1.1\r\n" +
+                "Host: localhost:8080\r\n" +
+
+                "Accept-Language: en-US,en;q=0.9\r\n" +
+                "\r\n";
+
+        InputStream inputStream = new ByteArrayInputStream(rawData.getBytes(
+                StandardCharsets.US_ASCII
+        )
+        );
+        return inputStream;
+    }
+
+    private InputStream generateBadTestCaseRequestLineInvalidNumOfItems(){
+        String rawData = "GET / AAAAA HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
 
                 "Accept-Language: en-US,en;q=0.9\r\n" +
