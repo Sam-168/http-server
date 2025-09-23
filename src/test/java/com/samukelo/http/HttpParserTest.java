@@ -32,10 +32,22 @@ class HttpParserTest {
         assertEquals(request.getMethod(), HttpMethod.GET);
     }
     @Test
-    void parseHttpRequestBadMethod() {
+    void parseHttpRequestBadMethod1() {
         try {
             HttpRequest request = httpParser.parseHttpRequest(
-                   generateBadTestCaseMethodName()
+                   generateBadTestCaseMethodName1()
+            );
+            //Bad test cases work without this hmm?fail();
+        } catch (HttpParsingException e) {
+            assertEquals(e.getErrorCode(), HttpStatusCode.SERVER_ERROR_501_NOT_IMPLEMENTED);
+        }
+
+    }
+    @Test
+    void parseHttpRequestBadMethod2() {
+        try {
+            HttpRequest request = httpParser.parseHttpRequest(
+                    generateBadTestCaseMethodName2()
             );
             //Bad test cases work without this hmm?fail();
         } catch (HttpParsingException e) {
@@ -69,8 +81,22 @@ class HttpParserTest {
         return inputStream;
     }
 
-    private InputStream generateBadTestCaseMethodName(){
+    private InputStream generateBadTestCaseMethodName1(){
         String rawData = "GET / HTTP/1.1\r\n" +
+                "Host: localhost:8080\r\n" +
+
+                "Accept-Language: en-US,en;q=0.9\r\n" +
+                "\r\n";
+
+        InputStream inputStream = new ByteArrayInputStream(rawData.getBytes(
+                StandardCharsets.US_ASCII
+        )
+        );
+        return inputStream;
+    }
+
+    private InputStream generateBadTestCaseMethodName2(){
+        String rawData = "GETTTT / HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
 
                 "Accept-Language: en-US,en;q=0.9\r\n" +
