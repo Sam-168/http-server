@@ -19,12 +19,16 @@ public class HttpParser {
     private static final int CR = 0x0D;
     private static final int LF = 0x0A;
 
-    public HttpRequest parseHttpRequest(InputStream inputStream) throws IOException {
+    public HttpRequest parseHttpRequest(InputStream inputStream) {
 
         InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.US_ASCII);
 
         HttpRequest request = new HttpRequest();
-        parseRequestLine(reader, request);
+        try {
+            parseRequestLine(reader, request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         parseHeaders(reader, request);
         parseBody(reader, request);
 
@@ -32,14 +36,23 @@ public class HttpParser {
 
     }
     private void parseRequestLine(InputStreamReader reader, HttpRequest request) throws IOException {
+        StringBuilder processingDataBuffer = new StringBuilder();
         //Loop where we look for the carriage return line feed chars
         int _byte;
         while ((_byte = reader.read()) >= 0){
             if (_byte == CR){
                 _byte = reader.read();
                 if (_byte == LF){
+
+                    LOGGER.debug("Request Line to Process : {} ", processingDataBuffer.toString());
                     return;
                 }
+            }
+            //if to check if the byte being read is the SP char
+            if (_byte == SP){
+                //TODO process prev data
+            }else{
+                processingDataBuffer.append((char)_byte);
             }
         }
     }
