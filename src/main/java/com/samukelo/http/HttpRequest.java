@@ -1,20 +1,19 @@
 package com.samukelo.http;
 
 public class HttpRequest extends HttpMessage{
-    private String method;
+    private HttpMethod method;
     private String requestTarget;
     private String httpVersion;
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
-    void setMethod(String method) {
-        this.method = method;
+    void setMethod(String methodName) {
+
+        this.method = HttpMethod.valueOf(methodName);
     }
 
-    HttpRequest(){
 
-    }
 
 }
