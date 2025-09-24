@@ -29,7 +29,9 @@ class HttpParserTest {
         } catch (HttpParsingException e) {
             fail(e);
         }
+        assertNotNull(request);
         assertEquals(request.getMethod(), HttpMethod.GET);
+        assertEquals(request.getRequestTarget(), "/");
     }
     @Test
     void parseHttpRequestBadMethod1() {
