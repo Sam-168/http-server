@@ -14,6 +14,14 @@ public class HttpRequest extends HttpMessage{
         return requestTarget;
     }
 
+    public HttpVersion getBestCompatibleHttpVersion() {
+        return bestCompatibleHttpVersion;
+    }
+
+    public String getOriginalHttpVersion() {
+        return originalHttpVersion;
+    }
+
     public void setHttpVersion(String originalHttpVersion) throws BadHttpVersionException, HttpParsingException {
         this.originalHttpVersion = originalHttpVersion;
         this.bestCompatibleHttpVersion = HttpVersion.getBestCompatibleVersion(originalHttpVersion);
