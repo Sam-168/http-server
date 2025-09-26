@@ -34,7 +34,7 @@ public class HttpParser {
         try {
             parseHeaders(reader, request);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+           e.printStackTrace();
         }
         parseBody(reader, request);
 
@@ -122,7 +122,7 @@ public class HttpParser {
         }
     }
 
-    private void processingSingleHeaderField(StringBuilder processingDataBuffer, HttpRequest request) {
+    private void processingSingleHeaderField(StringBuilder processingDataBuffer, HttpRequest request) throws HttpParsingException {
         String rawHeaderField = processingDataBuffer.toString();
         Pattern pattern = Pattern.compile("^(?<fieldName>[!#$%&’*+\\-./^_‘|˜\\dA-Za-z]+):\\s?(?<fieldValue>[!#$%&’*+\\-./^_‘|˜(),:;<=>?@[\\\\]{}\" \\dA-Za-z]+)\\s?$");
 
@@ -130,6 +130,9 @@ public class HttpParser {
         if (matcher.matches()){
             String fieldName = matcher.group("fieldName");
             String fieldValue = matcher.group("fieldValue");
+            request.addHeader(fieldName, fieldValue);
+        } else{
+            throw new HttpParsingException(HttpStatusCode.CLIENT_ERROR_400_BAD_REQUEST);
         }
 
     }

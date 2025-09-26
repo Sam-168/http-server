@@ -12,6 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class HttpHeadersParseTest {
     private HttpParser httpParser;
@@ -32,6 +34,8 @@ public class HttpHeadersParseTest {
         parseHeadersMethod.invoke(httpParser,
                 generateSimpleSingleHeaderMessage(),
                 request);
+        assertEquals(1, request.getHeaderNames().size());
+        assertEquals("localhost:8080", request.getHeader("host"));
     }
 
     private InputStreamReader generateSimpleSingleHeaderMessage() {

@@ -1,10 +1,16 @@
 package com.samukelo.http;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
+
 public class HttpRequest extends HttpMessage{
     private HttpMethod method;
     private String requestTarget;
     private String originalHttpVersion;
     private HttpVersion bestCompatibleHttpVersion;
+
+    private HashMap<String, String> headers = new HashMap<>();
 
     public HttpMethod getMethod() {
         return method;
@@ -22,7 +28,7 @@ public class HttpRequest extends HttpMessage{
         return originalHttpVersion;
     }
 
-    public void setHttpVersion(String originalHttpVersion) throws BadHttpVersionException, HttpParsingException {
+    void setHttpVersion(String originalHttpVersion) throws BadHttpVersionException, HttpParsingException {
         this.originalHttpVersion = originalHttpVersion;
         this.bestCompatibleHttpVersion = HttpVersion.getBestCompatibleVersion(originalHttpVersion);
         if (this.bestCompatibleHttpVersion == null){
@@ -50,5 +56,16 @@ public class HttpRequest extends HttpMessage{
             throw new HttpParsingException(HttpStatusCode.SERVER_ERROR_500_INTERNAL_SERVER_ERROR);
         }
         this.requestTarget = requestTarget;
+    }
+
+    void addHeader(String headerName, String headerField){
+        headers.put(headerName.toLowerCase(), headerField);
+    }
+
+    public Set<String> getHeaderNames() {
+        return headers.keySet();
+    }
+    public String getHeader(String headerName) {
+        return headers.get(headerName.toLowerCase());
     }
 }
